@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>QuantumLedger — Hybrid Fraud Detection Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="scanline"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">◈</span>
+    <div class="brand-text">
+      <span class="brand-name">QuantumLedger</span>
+      <span class="brand-sub">Hybrid Classical–Quantum Fraud Console</span>
+    </div>
+  </div>
+  <div class="topbar-meta">
+    <div class="meta-chip" id="chain-status">
+      <span class="dot dot-idle"></span> Ledger unverified
+    </div>
+    <div class="meta-chip">ORIGINS 2026 · Demo Build</div>
+  </div>
+</header>
+
+<main class="layout">
+
+  <section class="panel panel-control">
+    <div class="panel-head">
+      <h2><span class="step-tag">Live</span>Transaction Control</h2>
+      <p class="panel-sub">Run one test from the existing CSV or start the internal simulator to process new mock transactions automatically.</p>
+    </div>
+
+    <div class="control-stack">
+      <button id="run-test-btn" class="btn btn-primary" type="button">
+        <span class="btn-icon">▶</span> Run Test
+      </button>
+
+      <button id="sim-toggle-btn" class="btn btn-secondary" type="button">
+        <span class="btn-icon">●</span> Start Simulation
+      </button>
+    </div>
+
+    <div id="sim-status-box" class="status-box info">
+      <div class="status-label">Simulation status</div>
+      <div id="sim-status-text">Simulator is offline.</div>
+    </div>
+
+    <div class="stat-box">
+      <span class="stat-label">Transactions processed</span>
+      <strong id="processed-count">0</strong>
+    </div>
+  </section>
+
+  <section class="panel panel-pipeline">
+    <div class="panel-head">
+      <h2><span class="step-tag">Flow</span>Detection Pipeline</h2>
+    </div>
+    <div id="pipeline-flow" class="pipeline-flow"></div>
+  </section>
+
+  <section class="panel panel-result">
+    <div class="panel-head">
+      <h2><span class="step-tag">Result</span>Decision & Audit Trail</h2>
+    </div>
+
+    <div id="decision-card" class="decision-card decision-empty">
+      <div class="decision-empty-state">
+        <span class="decision-empty-icon">⌁</span>
+        <p>Run a transaction to see the decision, risk score, and quantum circuit detail here.</p>
+      </div>
+    </div>
+
+    <div class="ledger-head">
+      <h3>Blockchain Audit Log</h3>
+      <button type="button" id="verify-btn" class="btn-mini">Verify chain</button>
+    </div>
+    <div id="ledger-table" class="ledger-table">
+      <div class="ledger-empty">No blocks yet — the genesis block is written on the first transaction.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  Synthetic data · Local hash-chained ledger · PennyLane <code>default.qubit</code> VQC · Built for ORIGINS 2026
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
