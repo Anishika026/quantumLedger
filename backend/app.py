@@ -5,6 +5,7 @@ Run:  python app.py   then open http://localhost:5000
 """
 import os
 import random
+import logging
 import threading
 import time
 import datetime
@@ -15,6 +16,13 @@ from flask import Flask, jsonify, request, send_from_directory
 from pipeline import run_pipeline
 import blockchain
 from generate_data import generate_dataset, MERCHANT_CATEGORIES, DEVICE_TYPES, CITIES
+from payment_flow import PaymentStore, PaymentValidationError
+from rfid_reader import SerialRFIDReader
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+)
 
 FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "..", "frontend")
 SIMULATED_TRANSACTIONS_PATH = os.path.join(os.path.dirname(__file__), "simulated_transactions.csv")
@@ -25,6 +33,10 @@ app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
 SIMULATOR_RUNNING = False
 SIMULATOR_THREAD = None
 SIMULATOR_LOCK = threading.Lock()
+PAYMENT_STORE = PaymentStore()
+RFID_READER = SerialRFIDReader()
+RFID_READER_RUNNING = False
+RFID_READER_THREAD = None
 
 
 def _ensure_csv_exists():
@@ -197,6 +209,72 @@ def predict():
         return jsonify({"ok": False, "error": str(exc)}), 400
 
 
+@app.route("/api/v1/payments", methods=["POST"])
+def create_payment():
+    """Create a merchant payment request and wait for an RFID card tap."""
+    try:
+        payment = PAYMENT_STORE.create_payment_request(request.get_json(force=True) or {})
+        return jsonify({"ok": True, "payment": payment}), 201
+    except PaymentValidationError as exc:
+        return jsonify({"ok": False, "error": str(exc)}), 400
+
+
+@app.route("/api/v1/payments/<payment_id>", methods=["GET"])
+def payment_status(payment_id):
+    payment = PAYMENT_STORE.get_payment(payment_id)
+    if payment is None:
+        return jsonify({"ok": False, "error": "payment not found"}), 404
+    return jsonify({"ok": True, "payment": payment})
+
+
+@app.route("/api/v1/next-order", methods=["GET"])
+def next_order():
+    return jsonify({"ok": True, "order_id": PAYMENT_STORE.next_order_id()})
+
+
+@app.route("/api/v1/payments/<payment_id>/card-tap", methods=["POST"])
+def card_tap(payment_id):
+    """Consume one opaque token; hardware adapters can call the same service."""
+    payload = request.get_json(force=True) or {}
+    token = payload.get("rfid_token") or payload.get("card_token")
+    if not token or not isinstance(token, str):
+        return jsonify({"ok": False, "error": "rfid_token is required"}), 400
+    try:
+        payment = PAYMENT_STORE.process_card_tap(payment_id, token)
+        return jsonify({"ok": True, "payment": payment})
+    except PaymentValidationError as exc:
+        return jsonify({"ok": False, "error": str(exc)}), 404
+
+
+@app.route("/api/v1/reader-status", methods=["GET"])
+def reader_status():
+    return jsonify({"ok": True, "reader": RFID_READER.status()})
+
+
+def rfid_reader_worker():
+    """Route each serial token to the newest pending merchant payment."""
+    while RFID_READER_RUNNING:
+        token = RFID_READER.read()
+        if not token:
+            time.sleep(0.1)
+            continue
+        payment_id = PAYMENT_STORE.latest_pending_payment_id()
+        if payment_id:
+            try:
+                PAYMENT_STORE.process_card_tap(payment_id, token)
+            except PaymentValidationError:
+                continue
+
+
+def start_rfid_reader():
+    global RFID_READER_RUNNING, RFID_READER_THREAD
+    if RFID_READER_RUNNING:
+        return
+    RFID_READER_RUNNING = True
+    RFID_READER_THREAD = threading.Thread(target=rfid_reader_worker, daemon=True)
+    RFID_READER_THREAD.start()
+
+
 @app.route("/api/sample", methods=["GET"])
 def sample():
     """Returns one random realistic transaction for the 'try a sample' button."""
@@ -242,4 +320,5 @@ def meta():
 
 
 if __name__ == "__main__":
+    start_rfid_reader()
     app.run(host="0.0.0.0", port=5000, debug=False)

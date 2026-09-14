@@ -1,0 +1,436 @@
+{
+  "payments": {
+    "pay_e2cc3e85a3a0": {
+      "payment_id": "pay_e2cc3e85a3a0",
+      "transaction_id": "txn_4c12551f0e73",
+      "order_id": "order_demo_001",
+      "merchant_id": "merchant_001",
+      "customer_id": "customer_test_001",
+      "description": "Merchant card payment",
+      "amount": 250000,
+      "currency": "INR",
+      "payment_method_type": "CARD",
+      "status": "DECLINED",
+      "created_at": "2026-09-14T18:32:35.674252+00:00",
+      "updated_at": "2026-09-14T18:32:43.413989+00:00",
+      "reader_status": "PAYMENT_DECLINED",
+      "authorization": {
+        "status": "DECLINED",
+        "response_code": "62",
+        "reason": "CARD_BLOCKED"
+      },
+      "card": {
+        "masked_pan": "**** **** **** 2001",
+        "network": "MASTERCARD",
+        "expiry_month": 12,
+        "expiry_year": 2030
+      },
+      "pipeline_result": null
+    },
+    "pay_440bad8b0171": {
+      "payment_id": "pay_440bad8b0171",
+      "transaction_id": "txn_0ace8bb2bed5",
+      "order_id": "order_demo_002",
+      "merchant_id": "merchant_001",
+      "customer_id": "customer_test_002",
+      "description": "Merchant card payment",
+      "amount": 250000,
+      "currency": "INR",
+      "payment_method_type": "CARD",
+      "status": "AUTHORIZED",
+      "created_at": "2026-09-14T18:33:00.461599+00:00",
+      "updated_at": "2026-09-14T18:33:03.941106+00:00",
+      "reader_status": "PAYMENT_AUTHORIZED",
+      "authorization": {
+        "authorization_id": "auth_4e0c4eb10d7e",
+        "transaction_id": "txn_0ace8bb2bed5",
+        "amount": 250000,
+        "currency": "INR",
+        "status": "APPROVED",
+        "response_code": "00",
+        "authorization_code": "D200D9",
+        "reason": null,
+        "created_at": "2026-09-14T18:33:03.941080+00:00"
+      },
+      "card": {
+        "masked_pan": "**** **** **** 1001",
+        "network": "VISA",
+        "expiry_month": 12,
+        "expiry_year": 2030
+      },
+      "pipeline_result": {
+        "transaction_id": "txn_0ace8bb2bed5",
+        "decision": "APPROVE",
+        "decision_stage": "xgboost",
+        "xgboost_score": 0.0001,
+        "risk_band": "LOW",
+        "quantum_result": null,
+        "final_score": 0.0001,
+        "stages": [
+          {
+            "stage": "input",
+            "label": "Transaction Data Input",
+            "detail": {
+              "amount": 2500.0,
+              "hour_of_day": 18,
+              "device_type": "pos_terminal",
+              "merchant_category": "ecommerce",
+              "city": "Bengaluru",
+              "ip_risk_score": 0.05,
+              "is_new_merchant": 0,
+              "distance_from_home_km": 10,
+              "txn_velocity_1h": 1,
+              "avg_historical_amount": 2500,
+              "account_age_days": 900,
+              "network": "VISA"
+            }
+          },
+          {
+            "stage": "preprocessing",
+            "label": "Preprocessing",
+            "detail": {
+              "amount_deviation": 0.0,
+              "is_night_txn": false,
+              "is_high_value": false,
+              "velocity_risk": 0.1,
+              "device_risk": 0.03
+            }
+          },
+          {
+            "stage": "xgboost",
+            "label": "XGBoost Model",
+            "detail": {
+              "risk_score": 0.0001,
+              "risk_band": "LOW",
+              "thresholds": {
+                "T1": 0.3,
+                "T2": 0.7
+              }
+            }
+          },
+          {
+            "stage": "blockchain",
+            "label": "Blockchain Audit & Logging",
+            "detail": {
+              "block_index": 47,
+              "block_hash": "f4a46384ce1b8dccc4f524a975b3244574ed32180332f84f884228540acd1d49",
+              "previous_hash": "d5d3fa684542af880523a7dc81cef0bfdcced85c7f8dbba4f8656cebcec0ccb3",
+              "transaction_hash": "06f373ab2766142479c226dee847c1934fa4000215d0aedeb7920bc328bf4938",
+              "timestamp": 1789410783.9353108
+            }
+          }
+        ],
+        "block": {
+          "index": 47,
+          "timestamp": 1789410783.9353108,
+          "transaction_id": "txn_0ace8bb2bed5",
+          "transaction_hash": "06f373ab2766142479c226dee847c1934fa4000215d0aedeb7920bc328bf4938",
+          "decision": "APPROVE",
+          "risk_score": 0.0001,
+          "stage": "xgboost",
+          "previous_hash": "d5d3fa684542af880523a7dc81cef0bfdcced85c7f8dbba4f8656cebcec0ccb3",
+          "hash": "f4a46384ce1b8dccc4f524a975b3244574ed32180332f84f884228540acd1d49",
+          "nonce": 0
+        },
+        "latency_ms": 276.9
+      }
+    },
+    "pay_062390bcab0d": {
+      "payment_id": "pay_062390bcab0d",
+      "transaction_id": "txn_f56044fa90c9",
+      "order_id": "order_demo_003",
+      "merchant_id": "merchant_001",
+      "customer_id": "customer_test_001",
+      "description": "Merchant card payment",
+      "amount": 250000,
+      "currency": "INR",
+      "payment_method_type": "CARD",
+      "status": "AUTHORIZED",
+      "created_at": "2026-09-14T18:40:43.579598+00:00",
+      "updated_at": "2026-09-14T18:40:47.031076+00:00",
+      "reader_status": "PAYMENT_AUTHORIZED",
+      "authorization": {
+        "authorization_id": "auth_827eae79ed8d",
+        "transaction_id": "txn_f56044fa90c9",
+        "amount": 250000,
+        "currency": "INR",
+        "status": "APPROVED",
+        "response_code": "00",
+        "authorization_code": "E1606C",
+        "reason": null,
+        "created_at": "2026-09-14T18:40:47.031044+00:00"
+      },
+      "card": {
+        "masked_pan": "**** **** **** 1001",
+        "network": "VISA",
+        "expiry_month": 12,
+        "expiry_year": 2030
+      },
+      "pipeline_result": {
+        "transaction_id": "txn_f56044fa90c9",
+        "decision": "APPROVE",
+        "decision_stage": "xgboost",
+        "xgboost_score": 0.0001,
+        "risk_band": "LOW",
+        "quantum_result": null,
+        "final_score": 0.0001,
+        "stages": [
+          {
+            "stage": "input",
+            "label": "Transaction Data Input",
+            "detail": {
+              "amount": 2500.0,
+              "hour_of_day": 18,
+              "device_type": "pos_terminal",
+              "merchant_category": "ecommerce",
+              "city": "Bengaluru",
+              "ip_risk_score": 0.05,
+              "is_new_merchant": 0,
+              "distance_from_home_km": 10,
+              "txn_velocity_1h": 1,
+              "avg_historical_amount": 2500,
+              "account_age_days": 900,
+              "network": "VISA"
+            }
+          },
+          {
+            "stage": "preprocessing",
+            "label": "Preprocessing",
+            "detail": {
+              "amount_deviation": 0.0,
+              "is_night_txn": false,
+              "is_high_value": false,
+              "velocity_risk": 0.1,
+              "device_risk": 0.03
+            }
+          },
+          {
+            "stage": "xgboost",
+            "label": "XGBoost Model",
+            "detail": {
+              "risk_score": 0.0001,
+              "risk_band": "LOW",
+              "thresholds": {
+                "T1": 0.3,
+                "T2": 0.7
+              }
+            }
+          },
+          {
+            "stage": "blockchain",
+            "label": "Blockchain Audit & Logging",
+            "detail": {
+              "block_index": 48,
+              "block_hash": "d355bb9b00effbf2d07516fa497b3a58915ceef996a641c4f6e51ad69a6b9f38",
+              "previous_hash": "f4a46384ce1b8dccc4f524a975b3244574ed32180332f84f884228540acd1d49",
+              "transaction_hash": "74ebdd740db84f4a3ec9f98ee71d52166e8388d57a862aa52550138123a668f6",
+              "timestamp": 1789411247.0244057
+            }
+          }
+        ],
+        "block": {
+          "index": 48,
+          "timestamp": 1789411247.0244057,
+          "transaction_id": "txn_f56044fa90c9",
+          "transaction_hash": "74ebdd740db84f4a3ec9f98ee71d52166e8388d57a862aa52550138123a668f6",
+          "decision": "APPROVE",
+          "risk_score": 0.0001,
+          "stage": "xgboost",
+          "previous_hash": "f4a46384ce1b8dccc4f524a975b3244574ed32180332f84f884228540acd1d49",
+          "hash": "d355bb9b00effbf2d07516fa497b3a58915ceef996a641c4f6e51ad69a6b9f38",
+          "nonce": 0
+        },
+        "latency_ms": 231.5
+      }
+    },
+    "pay_703393f5e46e": {
+      "payment_id": "pay_703393f5e46e",
+      "transaction_id": "txn_487da40f847a",
+      "order_id": "order_demo_004",
+      "merchant_id": "merchant_001",
+      "customer_id": "customer_test_001",
+      "description": "Merchant card payment",
+      "amount": 500000,
+      "currency": "INR",
+      "payment_method_type": "CARD",
+      "status": "DECLINED",
+      "created_at": "2026-09-14T18:41:00.288696+00:00",
+      "updated_at": "2026-09-14T18:41:04.019203+00:00",
+      "reader_status": "PAYMENT_DECLINED",
+      "authorization": {
+        "status": "DECLINED",
+        "response_code": "62",
+        "reason": "CARD_BLOCKED"
+      },
+      "card": {
+        "masked_pan": "**** **** **** 2001",
+        "network": "MASTERCARD",
+        "expiry_month": 12,
+        "expiry_year": 2030
+      },
+      "pipeline_result": null
+    }
+  },
+  "orders": {
+    "order_demo_001": {
+      "order_id": "order_demo_001",
+      "merchant_id": "merchant_001",
+      "customer_id": "customer_test_001",
+      "description": "Merchant card payment",
+      "amount": 250000,
+      "currency": "INR",
+      "status": "CREATED"
+    },
+    "order_demo_002": {
+      "order_id": "order_demo_002",
+      "merchant_id": "merchant_001",
+      "customer_id": "customer_test_002",
+      "description": "Merchant card payment",
+      "amount": 250000,
+      "currency": "INR",
+      "status": "PAID"
+    },
+    "order_demo_003": {
+      "order_id": "order_demo_003",
+      "merchant_id": "merchant_001",
+      "customer_id": "customer_test_001",
+      "description": "Merchant card payment",
+      "amount": 250000,
+      "currency": "INR",
+      "status": "PAID"
+    },
+    "order_demo_004": {
+      "order_id": "order_demo_004",
+      "merchant_id": "merchant_001",
+      "customer_id": "customer_test_001",
+      "description": "Merchant card payment",
+      "amount": 500000,
+      "currency": "INR",
+      "status": "CREATED"
+    }
+  },
+  "transactions": {
+    "txn_4c12551f0e73": {
+      "transaction_id": "txn_4c12551f0e73",
+      "payment_id": "pay_e2cc3e85a3a0",
+      "order_id": "order_demo_001",
+      "merchant_id": "merchant_001",
+      "customer_id": "customer_test_001",
+      "amount": 250000,
+      "currency": "INR",
+      "type": "PURCHASE",
+      "status": "DECLINED",
+      "created_at": "2026-09-14T18:32:35.674252+00:00"
+    },
+    "txn_0ace8bb2bed5": {
+      "transaction_id": "txn_0ace8bb2bed5",
+      "payment_id": "pay_440bad8b0171",
+      "order_id": "order_demo_002",
+      "merchant_id": "merchant_001",
+      "customer_id": "customer_test_002",
+      "amount": 250000,
+      "currency": "INR",
+      "type": "PURCHASE",
+      "status": "AUTHORIZED",
+      "created_at": "2026-09-14T18:33:00.461599+00:00"
+    },
+    "txn_f56044fa90c9": {
+      "transaction_id": "txn_f56044fa90c9",
+      "payment_id": "pay_062390bcab0d",
+      "order_id": "order_demo_003",
+      "merchant_id": "merchant_001",
+      "customer_id": "customer_test_001",
+      "amount": 250000,
+      "currency": "INR",
+      "type": "PURCHASE",
+      "status": "AUTHORIZED",
+      "created_at": "2026-09-14T18:40:43.579598+00:00"
+    },
+    "txn_487da40f847a": {
+      "transaction_id": "txn_487da40f847a",
+      "payment_id": "pay_703393f5e46e",
+      "order_id": "order_demo_004",
+      "merchant_id": "merchant_001",
+      "customer_id": "customer_test_001",
+      "amount": 500000,
+      "currency": "INR",
+      "type": "PURCHASE",
+      "status": "DECLINED",
+      "created_at": "2026-09-14T18:41:00.288696+00:00"
+    }
+  },
+  "authorizations": {
+    "auth_4e0c4eb10d7e": {
+      "authorization_id": "auth_4e0c4eb10d7e",
+      "transaction_id": "txn_0ace8bb2bed5",
+      "amount": 250000,
+      "currency": "INR",
+      "status": "APPROVED",
+      "response_code": "00",
+      "authorization_code": "D200D9",
+      "reason": null,
+      "created_at": "2026-09-14T18:33:03.941080+00:00"
+    },
+    "auth_827eae79ed8d": {
+      "authorization_id": "auth_827eae79ed8d",
+      "transaction_id": "txn_f56044fa90c9",
+      "amount": 250000,
+      "currency": "INR",
+      "status": "APPROVED",
+      "response_code": "00",
+      "authorization_code": "E1606C",
+      "reason": null,
+      "created_at": "2026-09-14T18:40:47.031044+00:00"
+    }
+  },
+  "cards": {
+    "RFID_TEST_001": {
+      "card_token": "card_tok_test_001",
+      "masked_pan": "**** **** **** 1001",
+      "network": "VISA",
+      "expiry_month": 12,
+      "expiry_year": 2030,
+      "status": "ACTIVE",
+      "user_id": "user_test_001",
+      "account_id": "acct_test_001",
+      "account_status": "ACTIVE",
+      "available_balance": 999500000,
+      "customer_id": "customer_test_001"
+    },
+    "RFID_LOCKED_001": {
+      "card_token": "card_tok_locked_001",
+      "masked_pan": "**** **** **** 2001",
+      "network": "MASTERCARD",
+      "expiry_month": 12,
+      "expiry_year": 2030,
+      "status": "LOCKED",
+      "user_id": "user_test_002",
+      "account_id": "acct_test_002",
+      "account_status": "ACTIVE",
+      "available_balance": 500000,
+      "customer_id": "customer_test_002"
+    },
+    "RFID_LOW_BALANCE_001": {
+      "card_token": "card_tok_low_balance_001",
+      "masked_pan": "**** **** **** 3001",
+      "network": "RUPAY",
+      "expiry_month": 12,
+      "expiry_year": 2030,
+      "status": "ACTIVE",
+      "user_id": "user_test_003",
+      "account_id": "acct_test_003",
+      "account_status": "ACTIVE",
+      "available_balance": 100,
+      "customer_id": "customer_test_003"
+    }
+  },
+  "merchants": {
+    "merchant_001": {
+      "merchant_id": "merchant_001",
+      "name": "Quantum Store",
+      "country": "IN",
+      "currency": "INR",
+      "status": "ACTIVE"
+    }
+  }
+}
