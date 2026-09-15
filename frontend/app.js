@@ -32,6 +32,8 @@ let liveSimulationState = false;
 let livePollTimer = null;
 let lastSeenTransactionId = null;
 let processingInFlight = false;
+let activePaymentId = null;
+let paymentPollTimer = null;
 
 function renderSkeleton() {
   const container = $("pipeline-flow");
@@ -147,6 +149,97 @@ async function stopSimulation() {
     setStatusMessage(data.message || "Live simulation stopped.", "info");
   } catch (err) {
     alert(`Unable to stop simulator: ${err.message}`);
+  }
+}
+
+async function createPaymentRequest() {
+  const amount = Number($("payment-amount").value);
+  const orderId = $("payment-order").value.trim();
+  const customerId = $("payment-customer").value.trim();
+  if (!amount || amount <= 0 || !orderId || !customerId) {
+    setStatusMessage("Enter a positive amount, order ID, and customer ID.", "bad");
+    return;
+  }
+  try {
+    const res = await fetch("/api/v1/payments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        amount: Math.round(amount * 100),
+        currency: "INR",
+        merchant: { merchant_id: "merchant_001" },
+        customer: { customer_id: customerId },
+        order: { order_id: orderId, amount: Math.round(amount * 100), description: "Merchant card payment" },
+        payment_method: { type: "CARD" },
+      }),
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    activePaymentId = data.payment.payment_id;
+    setStatusMessage(`Payment ${activePaymentId} is waiting for an RFID card.`, "good");
+    startPaymentPolling();
+  } catch (err) {
+    setStatusMessage(`Payment request failed: ${err.message}`, "bad");
+  }
+}
+
+async function refreshNextOrderId() {
+  try {
+    const res = await fetch("/api/v1/next-order");
+    const data = await res.json();
+    if (data.ok) $("payment-order").value = data.order_id;
+  } catch (err) {
+    console.warn("Unable to load next order ID:", err);
+  }
+}
+
+function startPaymentPolling() {
+  if (paymentPollTimer) clearInterval(paymentPollTimer);
+  paymentPollTimer = setInterval(pollPaymentStatus, 1500);
+}
+
+async function pollPaymentStatus() {
+  if (!activePaymentId) return;
+  try {
+    const res = await fetch(`/api/v1/payments/${activePaymentId}`);
+    const data = await res.json();
+    if (!data.ok) return;
+    const payment = data.payment;
+    const declineReason = payment.authorization && payment.authorization.reason
+      ? ` Reason: ${payment.authorization.reason}.`
+      : "";
+    setStatusMessage(`Payment ${payment.status}. Reader: ${payment.reader_status}.${declineReason}`, payment.status === "PENDING" ? "info" : "good");
+    if (!["AUTHORIZED", "DECLINED", "FAILED"].includes(payment.status)) return;
+    clearInterval(paymentPollTimer);
+    paymentPollTimer = null;
+    if (payment.pipeline_result) {
+      resetPipeline();
+      await animateStages(payment.pipeline_result.stages, payment.pipeline_result.decision_stage);
+      renderDecision(payment.pipeline_result);
+      await refreshLedger();
+    }
+    await refreshNextOrderId();
+  } catch (err) {
+    console.warn("Payment status poll failed:", err);
+  }
+}
+
+async function simulateCardTap() {
+  if (!activePaymentId) {
+    setStatusMessage("Create a payment request before simulating a card tap.", "bad");
+    return;
+  }
+  try {
+    const res = await fetch(`/api/v1/payments/${activePaymentId}/card-tap`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ rfid_token: $("rfid-token").value.trim() }),
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    await pollPaymentStatus();
+  } catch (err) {
+    setStatusMessage(`Card tap failed: ${err.message}`, "bad");
   }
 }
 
@@ -334,9 +427,15 @@ $("verify-btn").addEventListener("click", async () => {
   }
 });
 
-$("run-test-btn").addEventListener("click", async () => {
-  await runExistingTest();
-});
+const runTestButton = $("run-test-btn");
+if (runTestButton) {
+  runTestButton.addEventListener("click", async () => {
+    await runExistingTest();
+  });
+}
+
+$("create-payment-btn").addEventListener("click", createPaymentRequest);
+$("tap-test-btn").addEventListener("click", simulateCardTap);
 
 $("sim-toggle-btn").addEventListener("click", async () => {
   if (liveSimulationState) {
@@ -348,5 +447,6 @@ $("sim-toggle-btn").addEventListener("click", async () => {
 
 renderSkeleton();
 updateProcessedCount();
+refreshNextOrderId();
 refreshSimulatorStatus();
 refreshLedger();
