@@ -32,23 +32,35 @@
 
   <section class="panel panel-control">
     <div class="panel-head">
-      <h2><span class="step-tag">Live</span>Transaction Control</h2>
-      <p class="panel-sub">Run one test from the existing CSV or start the internal simulator to process new mock transactions automatically.</p>
+      <h2><span class="step-tag">Live</span>Merchant Payment</h2>
+      <p class="panel-sub">Create an authorization request, then tap the customer RFID card on the connected reader.</p>
     </div>
 
     <div class="control-stack">
-      <button id="run-test-btn" class="btn btn-primary" type="button">
-        <span class="btn-icon">▶</span> Run Test
+      <label class="field-label" for="payment-amount">Amount (INR)</label>
+      <input id="payment-amount" class="text-input" type="number" min="1" step="0.01" value="2500" />
+      <label class="field-label" for="payment-order">Order ID</label>
+      <input id="payment-order" class="text-input" type="text" value="order_demo_001" />
+      <label class="field-label" for="payment-customer">Customer ID</label>
+      <input id="payment-customer" class="text-input" type="text" value="customer_test_001" />
+      <button id="create-payment-btn" class="btn btn-primary" type="button">
+        <span class="btn-icon">＋</span> Request Payment
+      </button>
+
+      <label class="field-label" for="rfid-token">Development RFID token</label>
+      <input id="rfid-token" class="text-input" type="text" value="RFID_TEST_001" />
+      <button id="tap-test-btn" class="btn btn-secondary" type="button">
+        <span class="btn-icon">⌁</span> Simulate Card Tap
       </button>
 
       <button id="sim-toggle-btn" class="btn btn-secondary" type="button">
-        <span class="btn-icon">●</span> Start Simulation
+        <span class="btn-icon">●</span> Legacy Simulator
       </button>
     </div>
 
     <div id="sim-status-box" class="status-box info">
-      <div class="status-label">Simulation status</div>
-      <div id="sim-status-text">Simulator is offline.</div>
+      <div class="status-label">Payment status</div>
+      <div id="sim-status-text">No payment request yet.</div>
     </div>
 
     <div class="stat-box">
