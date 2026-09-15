@@ -646,5 +646,101 @@
     "previous_hash": "b0df5462b04391bed1d85690c6e2c61dd92441b279a0a8141eb1535b81bc90bf",
     "hash": "e2d5caf8c6b7f0fe3249f0c10be55f7d347c26037a6808926a652d8e7916b333",
     "nonce": 0
+  },
+  {
+    "index": 54,
+    "timestamp": 1789487571.2083962,
+    "transaction_id": "txn_2dc982148c9e",
+    "transaction_hash": "02371181d9dd27d1c7bfce2c6f670086c67b591e783038c31e9dfe8569970d3a",
+    "decision": "APPROVE",
+    "risk_score": 0.0001,
+    "stage": "xgboost",
+    "previous_hash": "e2d5caf8c6b7f0fe3249f0c10be55f7d347c26037a6808926a652d8e7916b333",
+    "hash": "cf104af4fec96cf3daa045ec5c99ef4c5527ea5d71d02cd114cd784bd5a5c0ce",
+    "nonce": 0
+  },
+  {
+    "index": 55,
+    "timestamp": 1789489939.2939193,
+    "transaction_id": "txn_a92afdf63995",
+    "transaction_hash": "9be90e2cb0a45def54dae333f5a1f0dbad7d37ae62305d12791779d490530750",
+    "decision": "APPROVE",
+    "risk_score": 0.0001,
+    "stage": "xgboost",
+    "previous_hash": "cf104af4fec96cf3daa045ec5c99ef4c5527ea5d71d02cd114cd784bd5a5c0ce",
+    "hash": "003f92df466b9d4fa3448b775dd1f9136b23a94a31b506940d7e439cb1c6881c",
+    "nonce": 0
+  },
+  {
+    "index": 56,
+    "timestamp": 1789490211.9504619,
+    "transaction_id": "QUANTUM_CHECK",
+    "transaction_hash": "ecfb7324fa0613f68ebf97a271cb8fa4718283fb6c4f5c1ca12e50ce372dce5c",
+    "decision": "APPROVE",
+    "risk_score": 0.3419,
+    "stage": "quantum",
+    "previous_hash": "003f92df466b9d4fa3448b775dd1f9136b23a94a31b506940d7e439cb1c6881c",
+    "hash": "b5f82650389409b717864b57354ab9c8e58eaa740f551b2cab4e6ca6830eea9b",
+    "nonce": 0
+  },
+  {
+    "index": 57,
+    "timestamp": 1789490239.8564253,
+    "transaction_id": "txn_f387b1e6a688",
+    "transaction_hash": "f32834f647b01f80f0bc36c62530d496e8e1e2972e2302345ae70f696629c1c8",
+    "decision": "APPROVE",
+    "risk_score": 0.3419,
+    "stage": "quantum",
+    "previous_hash": "b5f82650389409b717864b57354ab9c8e58eaa740f551b2cab4e6ca6830eea9b",
+    "hash": "80bdfe701860165073c45378105e1437a5b4ca34a391dc67a4200ed25b2a125c",
+    "nonce": 0
+  },
+  {
+    "index": 58,
+    "timestamp": 1789490342.572946,
+    "transaction_id": "txn_48c7dba8a699",
+    "transaction_hash": "66b91419133f5ec4927a6905dfddd7412be9184ea3d49c30a4719f0c69c2d22c",
+    "decision": "APPROVE",
+    "risk_score": 0.0001,
+    "stage": "xgboost",
+    "previous_hash": "80bdfe701860165073c45378105e1437a5b4ca34a391dc67a4200ed25b2a125c",
+    "hash": "22df8e0995e9e89b2185b61b43273c584d9d563dfa881ae4f0cc0d16b17f8c3d",
+    "nonce": 0
+  },
+  {
+    "index": 59,
+    "timestamp": 1789490366.7516446,
+    "transaction_id": "txn_7b05f441c776",
+    "transaction_hash": "32723e9d15671925caee6a4de48483bdbda6bfc400f729af779003e66c7b3fda",
+    "decision": "APPROVE",
+    "risk_score": 0.0001,
+    "stage": "xgboost",
+    "previous_hash": "22df8e0995e9e89b2185b61b43273c584d9d563dfa881ae4f0cc0d16b17f8c3d",
+    "hash": "f9b9d4797652f75bc07d4f8a1aaa941b479392862e50b68ab47dd38e4a0cf837",
+    "nonce": 0
+  },
+  {
+    "index": 60,
+    "timestamp": 1789490457.9489748,
+    "transaction_id": "txn_762872739b74",
+    "transaction_hash": "ef2787207d121e7c297b7d1835ca825c6d92e974ff923712711a71061a830005",
+    "decision": "APPROVE",
+    "risk_score": 0.2075,
+    "stage": "xgboost",
+    "previous_hash": "f9b9d4797652f75bc07d4f8a1aaa941b479392862e50b68ab47dd38e4a0cf837",
+    "hash": "072269fa031bc885af25991d706df57b0c4b321fd07287bc6e2273c32015d7e6",
+    "nonce": 0
+  },
+  {
+    "index": 61,
+    "timestamp": 1789490602.9917703,
+    "transaction_id": "txn_fa71cc2c3a0e",
+    "transaction_hash": "83c2ccfd6a224e6e8fb33fd773c367c252266513186493decb345f69fffb2bb4",
+    "decision": "APPROVE",
+    "risk_score": 0.3419,
+    "stage": "quantum",
+    "previous_hash": "072269fa031bc885af25991d706df57b0c4b321fd07287bc6e2273c32015d7e6",
+    "hash": "96a76ff2caea284d0d634a8249c3102012bdccc121097119ffbff75bed82e1a1",
+    "nonce": 0
   }
 ]

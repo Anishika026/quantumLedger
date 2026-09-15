@@ -13,6 +13,17 @@ import pipeline
 LOGGER = logging.getLogger("quantumledger.payments")
 
 SUPPORTED_CURRENCY = "INR"
+DEFAULT_RISK_CONTEXT = {
+    "device_type": "pos_terminal",
+    "merchant_category": "ecommerce",
+    "city": "Bengaluru",
+    "ip_risk_score": 0.05,
+    "is_new_merchant": 0,
+    "distance_from_home_km": 10,
+    "txn_velocity_1h": 1,
+    "avg_historical_amount": 2500,
+    "account_age_days": 900,
+}
 STORE_PATH = os.getenv(
     "PAYMENT_STORE_PATH",
     os.path.join(os.path.dirname(__file__), "data", "payment_store.json"),
@@ -63,6 +74,19 @@ class PaymentStore:
                 "available_balance": 500000,
                 "customer_id": "customer_test_002",
             },
+            "RFID_QUANTUM_001": {
+                "card_token": "card_tok_quantum_001",
+                "masked_pan": "**** **** **** 4001",
+                "network": "RUPAY",
+                "expiry_month": 12,
+                "expiry_year": 2030,
+                "status": "ACTIVE",
+                "user_id": "user_test_004",
+                "account_id": "acct_test_004",
+                "account_status": "ACTIVE",
+                "available_balance": 1000000000,
+                "customer_id": "customer_test_004",
+            },
             "RFID_LOW_BALANCE_001": {
                 "card_token": "card_tok_low_balance_001",
                 "masked_pan": "**** **** **** 3001",
@@ -99,6 +123,10 @@ class PaymentStore:
             self.orders.update(state.get("orders", {}))
             self.transactions.update(state.get("transactions", {}))
             self.authorizations.update(state.get("authorizations", {}))
+            for payment in self.payments.values():
+                context = dict(DEFAULT_RISK_CONTEXT)
+                context.update(payment.get("risk_context") or {})
+                payment["risk_context"] = context
             for token, saved_card in state.get("cards", {}).items():
                 if token in self.cards:
                     self.cards[token].update(saved_card)
@@ -146,6 +174,8 @@ class PaymentStore:
         amount = payload.get("amount")
         currency = payload.get("currency", SUPPORTED_CURRENCY)
         order_amount = order_input.get("amount", amount)
+        risk_context = dict(DEFAULT_RISK_CONTEXT)
+        risk_context.update(payload.get("risk_context") or {})
 
         if not isinstance(amount, int) or isinstance(amount, bool) or amount <= 0:
             raise PaymentValidationError("amount must be a positive integer in paise")
@@ -183,6 +213,7 @@ class PaymentStore:
             "authorization": None,
             "card": None,
             "pipeline_result": None,
+            "risk_context": risk_context,
         }
         with self._lock:
             self.payments[payment_id] = payment
@@ -319,19 +350,21 @@ class PaymentStore:
 
     def _fraud_payload(self, payment, card):
         now = datetime.now(timezone.utc)
+        risk_context = dict(DEFAULT_RISK_CONTEXT)
+        risk_context.update(payment.get("risk_context") or {})
         return {
             "transaction_id": payment["transaction_id"],
             "amount": payment["amount"] / 100,
             "hour_of_day": now.hour,
-            "device_type": "pos_terminal",
-            "merchant_category": "ecommerce",
-            "city": "Bengaluru",
-            "ip_risk_score": 0.05,
-            "is_new_merchant": 0,
-            "distance_from_home_km": 10,
-            "txn_velocity_1h": 1,
-            "avg_historical_amount": 2500,
-            "account_age_days": 900,
+            "device_type": risk_context["device_type"],
+            "merchant_category": risk_context["merchant_category"],
+            "city": risk_context["city"],
+            "ip_risk_score": risk_context["ip_risk_score"],
+            "is_new_merchant": risk_context["is_new_merchant"],
+            "distance_from_home_km": risk_context["distance_from_home_km"],
+            "txn_velocity_1h": risk_context["txn_velocity_1h"],
+            "avg_historical_amount": risk_context["avg_historical_amount"],
+            "account_age_days": risk_context["account_age_days"],
             "network": card["network"],
         }
 
@@ -381,4 +414,5 @@ class PaymentStore:
             "card": payment["card"],
             "authorization": payment["authorization"],
             "pipeline_result": payment["pipeline_result"],
+            "risk_context": payment.get("risk_context", dict(DEFAULT_RISK_CONTEXT)),
         }
