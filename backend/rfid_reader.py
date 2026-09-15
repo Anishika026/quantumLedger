@@ -58,6 +58,14 @@ class SerialRFIDReader:
             raw = self._serial.readline()
             return raw.decode("utf-8", errors="ignore").strip() or None
 
+    def write(self, message):
+        with self._lock:
+            if self._serial is None and not self.connect():
+                return False
+            self._serial.write((str(message).strip() + "\n").encode("utf-8"))
+            self._serial.flush()
+            return True
+
     def status(self):
         return {
             "connected": self._serial is not None and self._serial.is_open,

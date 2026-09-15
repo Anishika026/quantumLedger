@@ -261,7 +261,11 @@ def rfid_reader_worker():
         payment_id = PAYMENT_STORE.latest_pending_payment_id()
         if payment_id:
             try:
-                PAYMENT_STORE.process_card_tap(payment_id, token)
+                payment = PAYMENT_STORE.process_card_tap(payment_id, token)
+                if payment["status"] == "AUTHORIZED":
+                    RFID_READER.write("PAYMENT_APPROVED")
+                elif payment["status"] == "DECLINED":
+                    RFID_READER.write("PAYMENT_DECLINED")
             except PaymentValidationError:
                 continue
 
